@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Speed Dialer",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: const MyHomePage(),
       // Hide that louzy banner!
@@ -36,10 +36,15 @@ class _MyHomePageState extends State<MyHomePage> {
   // For the contacts information.  Not that it must be nullable otherwise
   // an error will occur... ? char
   List<Contact>? contacts;
+  FToast? fToast;
 
   @override
   void initState() {
     super.initState();
+    // Prepare the toast
+    fToast = FToast();
+    fToast?.init(context);
+    // Get phone contacts
     getPhoneData();
   }
 
@@ -52,9 +57,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Temporary function to show details of a contact
+  void showDetails(String name, String phonenr) {
+    fToast?.showToast(child: Text("$name, $phonenr"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
             title:
                 const Text("Speed Dial", style: TextStyle(color: Colors.white)),
@@ -62,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 5),
         body: (contacts == null)
             ? const Center(child: CircularProgressIndicator())
+            /* Create a list of the contacts */
             : ListView.builder(
                 itemCount: contacts!.length,
                 padding: const EdgeInsets.all(5.0),
@@ -73,23 +85,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       ? (contacts![index].phones.first.number)
                       : "No phone number";
                   return Card(
+                    color: const Color.fromRGBO(255, 255, 10, 10),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
                     child: ListTile(
-                    dense: false,
-                    // Show an avatar of the contact's picture, or show first letter avatar
-                    leading: (image == null)
-                        ? const CircleAvatar(child: Icon(Icons.person))
-                        // If no image available...
-                        : CircleAvatar(
-                            backgroundImage: MemoryImage(image),
-                          ),
-                    title: Text(
-                        "${contacts![index].name.first} ${contacts![index].name.last}"),
-                    subtitle: Text(number),
-                    onLongPress: () {},
-                    onTap: () {
-                      launchUrlString('tel: $number');
-                    },
-                  ),);
+                      dense: false,
+                      // Show an avatar of the contact's picture, or show first letter avatar
+                      leading: (image == null)
+                          ? const CircleAvatar(child: Icon(Icons.person))
+                          // If no image available...
+                          : CircleAvatar(backgroundImage: MemoryImage(image)),
+                      trailing: IconButton(
+                          icon: const CircleAvatar(
+                              child: Icon(
+                            Icons.cabin,
+                            size: 30,
+                          )),
+                          iconSize: 40.0,
+                          onPressed: () {
+                            showDetails(contacts![index].name.first,
+                                contacts![index].phones.first.number);
+                          }),
+                      /* Show the name of the contact */
+                      title: Text(
+                          "${contacts![index].name.first} ${contacts![index].name.last}"),
+                      subtitle: Text(number),
+                    ),
+                  );
                 }));
   }
 }
