@@ -33,6 +33,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   sqflite: ^2.0.2+1
   fluttertoast: ^8.0.9
+  path_provider:
   flutter:
     sdk: flutter
 
