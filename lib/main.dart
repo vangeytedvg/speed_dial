@@ -11,10 +11,13 @@ import './screens/Fragments/list.dart';
 
 main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(QuickDialApp());
+  runApp(const QuickDialApp());
 }
 
+
 class QuickDialApp extends StatelessWidget {
+  const QuickDialApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +26,7 @@ class QuickDialApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       debugShowCheckedModeBanner: false,
-      home: ListScreen(),
+      home: const ListScreen(),
     );
   }
 }

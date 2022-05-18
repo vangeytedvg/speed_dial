@@ -55,6 +55,20 @@ class _ListScreenState extends State<ListScreen> {
   }
 
   /*
+    Handle selection from the appbar dropdown menu
+   */
+  void onSelected(BuildContext context, int item) {
+    switch(item) {
+      case 0:
+        // Empty the database screen
+        break;
+      case 1:
+        // Information about the app
+        break;
+    }
+  }
+
+  /*
     UI definition
     */
   @override
@@ -63,6 +77,17 @@ class _ListScreenState extends State<ListScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("Quick Dialer"),
+        centerTitle: true,
+        actions: [
+          PopupMenuButton<int>(
+            onSelected: (item) => onSelected(context, item),
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(
+                  value: 0, child: Text("Wis alle locale contacten")),
+              const PopupMenuItem<int>(value: 1, child: Text("About")),
+            ],
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -86,81 +111,79 @@ class _ListScreenState extends State<ListScreen> {
           // If we have some data ....
           final items = snapshot.data ?? <LocalContact>[];
           if (snapshot.hasError) return Text('${snapshot.error}');
-          if (snapshot.data!.isEmpty) {
-            return const Center(
-                child: Text(
-                  "Geen locale contacten, druk op (+) om er toe te voegen!",
-                  style: TextStyle(color: Colors.white,
-                  fontSize: 20),
-            ));
-          }
-          return Scrollbar(
-            child: RefreshIndicator(
-              onRefresh: _onRefresh,
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  if (items.isEmpty) {
-                    return const Center(
-                        child: Text("No local contacts in database!"));
-                  }
-                  /* Allow swipe delete */
-                  return Dismissible(
-                    direction: DismissDirection.startToEnd,
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: const Icon(Icons.delete_forever),
+          return items.isEmpty
+              ? const Center(
+                  child: Text(
+                      "Geen snel-contacten.\nDruk (+) om toe te voegen!",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                )
+              : Scrollbar(
+                  child: RefreshIndicator(
+                    onRefresh: _onRefresh,
+                    child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        /* Allow swipe delete */
+                        return Dismissible(
+                          direction: DismissDirection.startToEnd,
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.centerRight,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: const Icon(Icons.delete_forever),
+                          ),
+                          key: ValueKey<int?>(items[index].id),
+                          // Ask for permission to delete
+                          confirmDismiss: (DismissDirection direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirmeer wissen"),
+                                  content: const Text(
+                                      "Bent U zeker dat u dit locaal contact wilt verwijderen?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: const Text("Verwijder")),
+                                    FlatButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text("Annuleer"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onDismissed: (DismissDirection direction) async {
+                            // Remove from database and listview
+                            await handler?.deleteContact(items[index].id);
+                            setState(() {
+                              items.remove(items[index]);
+                              _onRefresh();
+                            });
+                          },
+                          child: Card(
+                              color: const Color.fromRGBO(255, 255, 10, 30),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.all(8.0),
+                                title: Text(
+                                    '${items[index].name} ${items[index].firstName}'),
+                                subtitle: Text('${items[index].phoneNr}'),
+                                onLongPress: () {
+                                  // Call the selected number without delay
+                                },
+                              )),
+                        );
+                      },
                     ),
-                    key: ValueKey<int?>(items[index].id),
-                    // Ask for permission to delete
-                    confirmDismiss: (DismissDirection direction) async {
-                      return await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Confirmeer wissen"),
-                            content: const Text(
-                                "Bent U zeker dat u dit locaal contact wilt verwijderen?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text("Verwijder")),
-                              FlatButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: const Text("Annuleer"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    onDismissed: (DismissDirection direction) async {
-                      // Remove from database and listview
-                      await handler?.deleteContact(items[index].id);
-                      setState(() {
-                        items.remove(items[index]);
-                        _onRefresh();
-                      });
-                    },
-                    child: Card(
-                        color: const Color.fromRGBO(255, 255, 10, 30),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(8.0),
-                          title: Text(
-                              '${items[index].name} ${items[index].firstName}'),
-                          subtitle: Text('${items[index].phoneNr}'),
-                        )),
-                  );
-                },
-              ),
-            ),
-          );
+                  ),
+                );
         },
       ),
     );
