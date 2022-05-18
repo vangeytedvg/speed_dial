@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
 import '../ChooseGoogleContacts.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _ListScreenState extends State<ListScreen> {
     Handle selection from the appbar dropdown menu
    */
   void onSelected(BuildContext context, int item) {
-    switch(item) {
+    switch (item) {
       case 0:
         // Empty the database screen
         break;
@@ -171,12 +172,25 @@ class _ListScreenState extends State<ListScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0)),
                               child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.blue,
+                                  child: Text(
+                                      "${items[index].firstName?.substring(0, 1)}"),
+                                ),
                                 contentPadding: const EdgeInsets.all(8.0),
                                 title: Text(
-                                    '${items[index].name} ${items[index].firstName}'),
+                                  '${items[index].firstName} ${items[index].name}',
+                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ),
                                 subtitle: Text('${items[index].phoneNr}'),
-                                onLongPress: () {
-                                  // Call the selected number without delay
+                                onLongPress: () async {
+                                  String? phoneNr = items[index].phoneNr;
+                                  if (phoneNr != null) {
+                                    // Call the selected number without delay
+                                    await FlutterPhoneDirectCaller.callNumber(phoneNr);
+                                  } else {
+
+                                  }
                                 },
                               )),
                         );
