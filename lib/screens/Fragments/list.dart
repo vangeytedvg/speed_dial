@@ -7,10 +7,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
 import '../ChooseGoogleContacts.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../erase_all_data.dart';
+import '../about_app.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({Key? key}) : super(key: key);
@@ -62,10 +65,11 @@ class _ListScreenState extends State<ListScreen> {
     switch (item) {
       case 0:
         // Empty the database screen
-
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EraseData()));
         break;
       case 1:
         // Information about the app
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutPage()));
         break;
     }
   }
@@ -146,11 +150,11 @@ class _ListScreenState extends State<ListScreen> {
                                   content: const Text(
                                       "Bent U zeker dat u dit locaal contact wilt verwijderen?"),
                                   actions: <Widget>[
-                                    FlatButton(
+                                    TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(true),
-                                        child: const Text("Verwijder")),
-                                    FlatButton(
+                                        child: const Text("Verwijder", style: TextStyle(color: Colors.red),)),
+                                    TextButton(
                                       onPressed: () =>
                                           Navigator.of(context).pop(false),
                                       child: const Text("Annuleer"),
