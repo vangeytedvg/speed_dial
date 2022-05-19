@@ -62,6 +62,7 @@ class _ListScreenState extends State<ListScreen> {
     switch (item) {
       case 0:
         // Empty the database screen
+
         break;
       case 1:
         // Information about the app
