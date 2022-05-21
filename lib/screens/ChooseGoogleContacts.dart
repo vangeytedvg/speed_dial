@@ -13,7 +13,7 @@ class GoogleChooser extends StatefulWidget {
 
 class _GoogleChooserState extends State<GoogleChooser> {
   List<Contact>? contacts;
-  bool _permissionDenied = false;
+  //final bool _permissionDenied = false;
 
   // Get the phone's contact list on startup
   @override

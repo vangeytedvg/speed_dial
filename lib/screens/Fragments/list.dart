@@ -8,12 +8,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:friendly_chat/models/history.dart';
 
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
 import '../ChooseGoogleContacts.dart';
-import '../erase_all_data.dart';
 import '../about_app.dart';
+import '../call_history.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
     // Create instance of database helper
     handler = DatabaseHandler();
+    // Commented because the table was created : handler?.createHistory();
     handler?.initializeDB().whenComplete(() async {
       setState(() {
         _contacts = getList();
@@ -65,13 +67,16 @@ class _ListScreenState extends State<ListScreen> {
     switch (item) {
       case 0:
         // Empty the database screen
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EraseData()));
         break;
       case 1:
         // Information about the app
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutPage()));
         break;
     }
+  }
+
+  void _callContact(String contactnr) async {
+    await FlutterPhoneDirectCaller.callNumber(contactnr);
   }
 
   /*
@@ -88,8 +93,6 @@ class _ListScreenState extends State<ListScreen> {
           PopupMenuButton<int>(
             onSelected: (item) => onSelected(context, item),
             itemBuilder: (context) => [
-              const PopupMenuItem<int>(
-                  value: 0, child: Text("Wis alle locale contacten")),
               const PopupMenuItem<int>(value: 1, child: Text("About")),
             ],
           )
@@ -182,6 +185,20 @@ class _ListScreenState extends State<ListScreen> {
                                   child: Text(
                                       "${items[index].firstName?.substring(0, 1)}"),
                                 ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.list),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const CallHistory(),
+                                        settings: RouteSettings(
+                                          arguments: items[index],
+                                        )
+                                      ),
+                                    );
+                                  },
+                                ),
                                 contentPadding: const EdgeInsets.all(8.0),
                                 title: Text(
                                   '${items[index].firstName} ${items[index].name}',
@@ -189,13 +206,23 @@ class _ListScreenState extends State<ListScreen> {
                                 ),
                                 subtitle: Text('${items[index].phoneNr}'),
                                 onLongPress: () async {
-                                  String? phoneNr = items[index].phoneNr;
-                                  if (phoneNr != null) {
-                                    // Call the selected number without delay
-                                    await FlutterPhoneDirectCaller.callNumber(phoneNr);
-                                  } else {
+                                  final int? callId = items[index].id;
+                                  await DatabaseHandler()
+                                      .insertCallHistory(History(
+                                        called: DateTime.now().toString(),
+                                        calledId: callId,
 
-                                  }
+                                  ));
+                                  //_callContact(items[index].phoneNr!);
+
+                                  // String? phoneNr = items[index].phoneNr;
+                                  // if (phoneNr != null) {
+                                  //   // Call the selected number without delay
+                                  //   await FlutterPhoneDirectCaller.callNumber(phoneNr);
+                                  // } else {
+                                  //
+                                  // }
+
                                 },
                               )),
                         );
@@ -206,5 +233,6 @@ class _ListScreenState extends State<ListScreen> {
         },
       ),
     );
+
   }
 }

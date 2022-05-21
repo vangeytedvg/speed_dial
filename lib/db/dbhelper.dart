@@ -8,20 +8,21 @@
   Created : 16/05/2022
     LM    : 16/05/2022
  */
-import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import '../models/local_contact.dart';
+import '../models/history.dart';
 
 
 class DatabaseHandler {
+  int callHistoryRecordCount = 0;
   /*
     Initialize database
    */
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
+    print("DBPATH ${path}");
     String sql = """CREATE TABLE contacts(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT,
@@ -29,10 +30,54 @@ class DatabaseHandler {
         phoneNr TEXT,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )""";
+    String sqlhistory = """CREATE TABLE callhistory(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        calledId INTEGER,
+        called TEXT,        
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )""";
     return openDatabase(join(path, 'quickdial.db'),
         onCreate: (database, version) async {
           await database.execute(sql);
-        }, version: 2);
+          await database.execute(sqlhistory);
+        }, version: 3);
+  }
+
+  Future<void> createHistory() async {
+    final db = await initializeDB();
+    db.execute("""CREATE TABLE history(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        calledId INTEGER,
+        called TEXT,        
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )""");
+  }
+
+  /*
+    Call history data
+   */
+  Future<void> insertCallHistory(History history) async {
+    final db = await initializeDB();
+    await db.insert('history', history.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+   int get getCallHistoryCount => callHistoryRecordCount;
+
+  /*
+    Returns a list of calls to a contact
+   */
+  Future<List<History>> getCallHistory(int id) async {
+    final db = await initializeDB();
+    String sql = "SELECT * FROM history WHERE calledId = $id ORDER BY id DESC";
+    var result = await db.rawQuery(sql);
+
+    List<History> list = result.map((item) {
+      return History.fromMap(item);
+    }).toList();
+    callHistoryRecordCount = list.length;
+    return list;
   }
 
   /*
