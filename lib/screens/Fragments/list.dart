@@ -3,7 +3,8 @@
   Application main UI.  Shows the local contacts and allows adding or deleteing them
   Author : DenkaTech
   Create : 18/05/2022
-    LM : 18/05/2022
+    History : 22/05/2022
+      - Changed card color and avatar color
  */
 
 import 'package:flutter/material.dart';
@@ -176,17 +177,20 @@ class _ListScreenState extends State<ListScreen> {
                             });
                           },
                           child: Card(
-                              color: const Color.fromRGBO(255, 255, 10, 30),
+                              color: const Color.fromRGBO(255, 255, 100, 10),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0)),
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.blue,
-                                  child: Text(
+                                  radius: 25,
+                                  backgroundColor: Colors.green,
+                                  child: Text(style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                       "${items[index].firstName?.substring(0, 1)}"),
                                 ),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.list),
+                                  iconSize: 30,
+                                  color: Colors.black45,
                                   onPressed: () {
                                     Navigator.push(
                                       context,
@@ -213,15 +217,12 @@ class _ListScreenState extends State<ListScreen> {
                                         calledId: callId,
 
                                   ));
-                                  //_callContact(items[index].phoneNr!);
 
-                                  // String? phoneNr = items[index].phoneNr;
-                                  // if (phoneNr != null) {
-                                  //   // Call the selected number without delay
-                                  //   await FlutterPhoneDirectCaller.callNumber(phoneNr);
-                                  // } else {
-                                  //
-                                  // }
+                                  String? phoneNr = items[index].phoneNr;
+                                  if (phoneNr != null) {
+                                    // Call the selected number without delay
+                                    await FlutterPhoneDirectCaller.callNumber(phoneNr);
+                                  }
 
                                 },
                               )),

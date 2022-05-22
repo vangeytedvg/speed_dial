@@ -42,7 +42,16 @@ class _CallHistoryState extends State<CallHistory> {
       backgroundColor: Colors.black45,
       appBar: AppBar(
         backgroundColor: Colors.green.shade900,
-        title: Text('Oproep geschiedenis'),
+        title: const Text('Oproep geschiedenis'),
+        actions: [
+          PopupMenuButton<int>(
+            onSelected: (item) => onSelected(context, item, contact.id),
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(
+                  value: 0, child: Text("Wis deze geschiedenis")),
+            ],
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -64,29 +73,45 @@ class _CallHistoryState extends State<CallHistory> {
                 /* If expanded is not added here, the system will complain with
                 * "A RenderFlex overflowed by 309 pixels on the bottom."
                 * */
-                return Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: snapshot.data!
-                        .map(
-                          (history) => ListTile(
-                            title: Text(
-                                style: TextStyle(color: Colors.white),
-                                "Oproep gedaan op:"),
-                            subtitle: Text(
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 20),
-                                history.called.toString()),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                );
+                if (handler?.getCallHistoryCount == 0) {
+                  return (const Center(
+                      child: Text(
+                          style: TextStyle(color: Colors.white, fontSize: 20, fontStyle: FontStyle.italic),
+                          "Geen oproep geschiedenis!")));
+                } else {
+                  return Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: snapshot.data!
+                          .map(
+                            (history) => ListTile(
+                              title: Text(
+                                  style: TextStyle(color: Colors.white),
+                                  "Oproep gedaan op:"),
+                              subtitle: Text(
+                                  style: TextStyle(
+                                      color: Colors.white),
+                                  history.called.toString()),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  );
+                }
               }
             },
           ),
         ],
       ),
     );
+  }
+
+  onSelected(BuildContext context, int item, int? contactId) {
+    switch (item) {
+      case 0:
+        handler?.deleteHistory(contactId);
+        setState(() {});
+        break;
+    }
   }
 }
