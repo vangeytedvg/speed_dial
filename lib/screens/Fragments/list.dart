@@ -37,7 +37,7 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
     // Create instance of database helper
     handler = DatabaseHandler();
-    // Commented because the table was created : handler?.createHistory();
+    // handler?.createHistory();
     handler?.initializeDB().whenComplete(() async {
       setState(() {
         _contacts = getList();

@@ -123,6 +123,7 @@ class DatabaseHandler {
       where: 'id = ?',
       whereArgs: [id],
     );
+    await deleteHistory(id);
   }
 
   Future<void> clearContactsAll() async {

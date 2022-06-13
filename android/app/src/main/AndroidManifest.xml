@@ -13,7 +13,7 @@
     </queries>
 
     <application
-        android:label="friendly_chat"
+        android:label="Quick Dial"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

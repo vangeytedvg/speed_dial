@@ -2,7 +2,8 @@
   main.dart
   Author : DenkaTech
   Created : 17/05/2022
-    LM : 17/06/2022
+    LM : 17/05/2022
+    LM : 13/06/2022  - Started adding localization support.
  */
 import 'package:flutter/material.dart';
 import './screens/Fragments/list.dart';
