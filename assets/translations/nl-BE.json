@@ -3,5 +3,13 @@
     "about_title": "Quick Dial Applicatie",
     "about_version": "Versie 0.1.2",
     "about_written": "Geschreven in Flutter 3.0",
-    "list_no_records": "Geen snel-contacten.\nDruk (+) om toe te voegen!"
+    "list_no_records": "Geen snel-contacten.\nDruk (+) om toe te voegen!",
+    "list_alert_confirm_delete_title": "Confirmeer wissen",
+    "list_alert_delete_question": "Bent U zeker dat u dit locaal contact wilt verwijderen?",
+    "list_alert_confirm_yes": "Verwijder",
+    "list_alert_confirm_no": "Annuleer",
+    "call_history_title": "Oproep geschiedenis",
+    "call_history_erase_menu_item": "Wis deze geschiedenis",
+    "call_history_no_records": "Geen oproep geschiedenis!",
+    "call_history_called_at": "Oproep gedaan op:" 
 }

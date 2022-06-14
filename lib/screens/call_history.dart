@@ -16,7 +16,7 @@ class CallHistory extends StatefulWidget {
 
 class _CallHistoryState extends State<CallHistory> {
   DatabaseHandler? handler;
-  Future<List<History>>? _history;
+  //Future<List<History>>? _history;
   int? nrOfHistories;
   LocalContact? myContact;
 
@@ -76,7 +76,10 @@ class _CallHistoryState extends State<CallHistory> {
                 if (handler?.getCallHistoryCount == 0) {
                   return (const Center(
                       child: Text(
-                          style: TextStyle(color: Colors.white, fontSize: 20, fontStyle: FontStyle.italic),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontStyle: FontStyle.italic),
                           "Geen oproep geschiedenis!")));
                 } else {
                   return Expanded(
@@ -89,8 +92,7 @@ class _CallHistoryState extends State<CallHistory> {
                                   style: TextStyle(color: Colors.white),
                                   "Oproep gedaan op:"),
                               subtitle: Text(
-                                  style: TextStyle(
-                                      color: Colors.white),
+                                  style: TextStyle(color: Colors.white),
                                   history.called.toString()),
                             ),
                           )

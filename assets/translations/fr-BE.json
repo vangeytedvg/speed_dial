@@ -3,5 +3,13 @@
     "about_title": "Quick Dial Application",
     "about_version": "Version 0.1.2",
     "about_written": "Écrit en Flutter 3.0",
-    "list_no_records": "Pas de contacts rapides, appuyez sur (+) pour ajouter"
+    "list_no_records": "Pas de contacts rapides, appuyez sur (+) pour ajouter",
+    "list_alert_confirm_delete_title": "Supprimer contact",
+    "list_alert_delete_question": "Voulez-vous vraiment supprimer ce contact local ?",
+    "list_alert_confirm_yes": "Effacer",
+    "list_alert_confirm_no": "Annuler",
+    "call_history_title": "Historique des appels",
+    "call_history_erase_menu_item": "Efface historique",
+    "call_history_no_records": "Pas d’historique d’appels!",
+    "call_history_called_at": "Appel effectué le"
 }
