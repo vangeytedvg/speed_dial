@@ -14,6 +14,7 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   runApp(
+    // For internationalization the app must be wrapped as this
     EasyLocalization(
         supportedLocales: const [
           Locale('en', 'US'),
@@ -36,7 +37,7 @@ class QuickDialApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      title: 'todos',
+      title: 'Quick Dial',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),

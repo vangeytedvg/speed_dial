@@ -1,0 +1,7 @@
+{
+    "about": "About",
+    "about_title": "Quick Dial Application",
+    "about_version": "Version 0.1.2",
+    "about_written": "Written in Flutter 3.0",
+    "list_no_records": "No Quick contacts.\nPress (+) to add!"
+}
