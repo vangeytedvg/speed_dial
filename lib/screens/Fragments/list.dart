@@ -71,13 +71,10 @@ class _ListScreenState extends State<ListScreen> {
         break;
       case 1:
         // Information about the app
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutPage()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => const AboutPage()));
         break;
     }
-  }
-
-  void _callContact(String contactnr) async {
-    await FlutterPhoneDirectCaller.callNumber(contactnr);
   }
 
   /*
@@ -157,7 +154,10 @@ class _ListScreenState extends State<ListScreen> {
                                     TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(true),
-                                        child: const Text("Verwijder", style: TextStyle(color: Colors.red),)),
+                                        child: const Text(
+                                          "Verwijder",
+                                          style: TextStyle(color: Colors.red),
+                                        )),
                                     TextButton(
                                       onPressed: () =>
                                           Navigator.of(context).pop(false),
@@ -184,7 +184,10 @@ class _ListScreenState extends State<ListScreen> {
                                 leading: CircleAvatar(
                                   radius: 25,
                                   backgroundColor: Colors.green,
-                                  child: Text(style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                                  child: Text(
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
                                       "${items[index].firstName?.substring(0, 1)}"),
                                 ),
                                 trailing: IconButton(
@@ -195,35 +198,36 @@ class _ListScreenState extends State<ListScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const CallHistory(),
-                                        settings: RouteSettings(
-                                          arguments: items[index],
-                                        )
-                                      ),
+                                          builder: (context) =>
+                                              const CallHistory(),
+                                          settings: RouteSettings(
+                                            arguments: items[index],
+                                          )),
                                     );
                                   },
                                 ),
                                 contentPadding: const EdgeInsets.all(8.0),
                                 title: Text(
                                   '${items[index].firstName} ${items[index].name}',
-                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text('${items[index].phoneNr}'),
                                 onLongPress: () async {
                                   final int? callId = items[index].id;
                                   await DatabaseHandler()
                                       .insertCallHistory(History(
-                                        called: DateTime.now().toString(),
-                                        calledId: callId,
-
+                                    called: DateTime.now().toString(),
+                                    calledId: callId,
                                   ));
 
                                   String? phoneNr = items[index].phoneNr;
                                   if (phoneNr != null) {
                                     // Call the selected number without delay
-                                    await FlutterPhoneDirectCaller.callNumber(phoneNr);
+                                    await FlutterPhoneDirectCaller.callNumber(
+                                        phoneNr);
                                   }
-
                                 },
                               )),
                         );
@@ -234,6 +238,5 @@ class _ListScreenState extends State<ListScreen> {
         },
       ),
     );
-
   }
 }

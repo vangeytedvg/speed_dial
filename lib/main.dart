@@ -7,10 +7,24 @@
  */
 import 'package:flutter/material.dart';
 import './screens/Fragments/list.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const QuickDialApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('nl', 'BE'),
+          Locale('fr', 'BE')
+        ],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const QuickDialApp()),
+  );
+  //const QuickDialApp());
 }
 
 class QuickDialApp extends StatelessWidget {
@@ -19,6 +33,9 @@ class QuickDialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       title: 'todos',
       theme: ThemeData(
         primarySwatch: Colors.green,
