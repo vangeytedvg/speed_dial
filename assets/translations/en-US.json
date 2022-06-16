@@ -11,5 +11,10 @@
     "call_history_title": "Call history",
     "call_history_erase_menu_item": "Erase history",
     "call_history_no_records": "No call history",
-    "call_history_called_at": "Called on:"
+    "call_history_called_at": "Called on:",
+    "choose_google_contacts_title": "Add google contact",
+    "choose_google_contacts_no_phone": "No phone number",
+    "choose_google_contacts_no_phone_dialog_title": "No phone number",
+    "choose_google_contacts_no_phone_dialog_content": "This contact has no phone nr, it is useless to add it",
+    "choose_google_contacts_no_phone_dialog_ok": "Got it."
 }

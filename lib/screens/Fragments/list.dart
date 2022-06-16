@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:friendly_chat/models/history.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
@@ -85,13 +86,13 @@ class _ListScreenState extends State<ListScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text("Quick Dialer"),
+        title: Text("about_title".tr()),
         centerTitle: true,
         actions: [
           PopupMenuButton<int>(
             onSelected: (item) => onSelected(context, item),
             itemBuilder: (context) => [
-              const PopupMenuItem<int>(value: 1, child: Text("About")),
+              PopupMenuItem<int>(value: 1, child: Text("about".tr())),
             ],
           )
         ],
@@ -119,10 +120,10 @@ class _ListScreenState extends State<ListScreen> {
           final items = snapshot.data ?? <LocalContact>[];
           if (snapshot.hasError) return Text('${snapshot.error}');
           return items.isEmpty
-              ? const Center(
-                  child: Text(
-                      "Geen snel-contacten.\nDruk (+) om toe te voegen!",
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
+              ? Center(
+                  child: Text("list_no_records".tr(),
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 20)),
                 )
               : Scrollbar(
                   child: RefreshIndicator(
@@ -147,21 +148,23 @@ class _ListScreenState extends State<ListScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text("Confirmeer wissen"),
-                                  content: const Text(
-                                      "Bent U zeker dat u dit locaal contact wilt verwijderen?"),
+                                  title: Text(
+                                      "list_alert_confirm_delete_title".tr()),
+                                  content:
+                                      Text("list_alert_delete_question".tr()),
                                   actions: <Widget>[
                                     TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(true),
-                                        child: const Text(
-                                          "Verwijder",
-                                          style: TextStyle(color: Colors.red),
+                                        child: Text(
+                                          "list_alert_confirm_yes".tr(),
+                                          style: const TextStyle(
+                                              color: Colors.red),
                                         )),
                                     TextButton(
                                       onPressed: () =>
                                           Navigator.of(context).pop(false),
-                                      child: const Text("Annuleer"),
+                                      child: Text("list_alert_confirm_no".tr()),
                                     ),
                                   ],
                                 );

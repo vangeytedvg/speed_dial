@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:friendly_chat/models/local_contact.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:typed_data';
 import '../db/dbhelper.dart';
 
@@ -38,8 +39,8 @@ class _GoogleChooserState extends State<GoogleChooser> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-            title: const Text("Add google contact",
-                style: TextStyle(color: Colors.white)),
+            title: Text("choose_google_contacts_title".tr(),
+                style: const TextStyle(color: Colors.white)),
             centerTitle: true,
             elevation: 5),
         body: (contacts == null)
@@ -80,14 +81,19 @@ class _GoogleChooserState extends State<GoogleChooser> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text("Geen telefoonnummer"),
-                                      content: const Text(
-                                          "Dit contact heeft geen telefoonnummer in google contacts. Het is nutteloos om dit toe te voegen!"),
+                                      title: Text(
+                                          "choose_google_contacts_no_phone"
+                                              .tr()),
+                                      content: Text(
+                                          "choose_google_contacts_no_phone_dialog_content"
+                                              .tr()),
                                       actions: <Widget>[
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
-                                            child: const Text("Begrepen")),
+                                            child: Text(
+                                                "choose_google_contacts_no_phone_dialog_ok"
+                                                    .tr())),
                                       ],
                                     );
                                   });

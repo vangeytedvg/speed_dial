@@ -11,5 +11,10 @@
     "call_history_title": "Historique des appels",
     "call_history_erase_menu_item": "Efface historique",
     "call_history_no_records": "Pas d’historique d’appels!",
-    "call_history_called_at": "Appel effectué le"
+    "call_history_called_at": "Appel effectué le",
+    "choose_google_contacts_title": "Ajouter un contact Google",
+    "choose_google_contacts_no_phone": "Pas de numéro de téléphone",
+    "choose_google_contacts_no_phone_dialog_title": "Pas de numéro de téléphone",
+    "choose_google_contacts_no_phone_dialog_content": "Ce contact n'a pas de numéro de téléphone dans Google Contacts. Il est inutile d'ajouter ce contact !",
+    "choose_google_contacts_no_phone_dialog_ok": "Compris"
 }

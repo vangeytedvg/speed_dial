@@ -25,7 +25,6 @@ main() async {
         fallbackLocale: const Locale('en', 'US'),
         child: const QuickDialApp()),
   );
-  //const QuickDialApp());
 }
 
 class QuickDialApp extends StatelessWidget {

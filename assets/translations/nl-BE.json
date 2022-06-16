@@ -1,6 +1,6 @@
 {
     "about": "Over",
-    "about_title": "Quick Dial Applicatie",
+    "about_title": "Quick Dial",
     "about_version": "Versie 0.1.2",
     "about_written": "Geschreven in Flutter 3.0",
     "list_no_records": "Geen snel-contacten.\nDruk (+) om toe te voegen!",
@@ -11,5 +11,10 @@
     "call_history_title": "Oproep geschiedenis",
     "call_history_erase_menu_item": "Wis deze geschiedenis",
     "call_history_no_records": "Geen oproep geschiedenis!",
-    "call_history_called_at": "Oproep gedaan op:" 
+    "call_history_called_at": "Oproep gedaan op:",
+    "choose_google_contacts_title": "Google contact toevoegen",
+    "choose_google_contacts_no_phone": "Geen telefoonnummer",
+    "choose_google_contacts_no_phone_dialog_title": "Geen telefoonnummer",
+    "choose_google_contacts_no_phone_dialog_content": "Dit contact heeft geen telefoonnummer in google contacts. Het is nutteloos om dit toe te voegen!",
+    "choose_google_contacts_no_phone_dialog_ok": "Begrepen"
 }

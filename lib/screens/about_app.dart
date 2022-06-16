@@ -5,6 +5,7 @@
   Created : 19/05/2022
  */
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -36,8 +37,8 @@ Widget _aboutLayout() {
               fontFamily: "BrushKing-MVVPp"),
         )),
       ),
-      const ListTile(
-        title: Center(
+      ListTile(
+        title: const Center(
             child: Text(
           'Software',
           style: TextStyle(
@@ -46,8 +47,7 @@ Widget _aboutLayout() {
               fontFamily: "BrushKing-MVVPp"),
         )),
         subtitle: Center(
-            child:
-                Text('Quick Dial Application', style: TextStyle(fontSize: 20))),
+            child: Text("about_title".tr(), style: TextStyle(fontSize: 20))),
       ),
       const SizedBox(
         height: 45,
@@ -55,9 +55,9 @@ Widget _aboutLayout() {
       Container(
           alignment: Alignment.center,
           child: Image.asset("assets/splash.png", fit: BoxFit.cover)),
-      const ListTile(
-        title: Center(child: Text('Versie 0.1.2')),
-        subtitle: Center(child: Text('Geschreven in Flutter 3.0')),
+      ListTile(
+        title: Center(child: Text("about_version".tr())),
+        subtitle: Center(child: Text("about_written".tr())),
       ),
     ],
   );
