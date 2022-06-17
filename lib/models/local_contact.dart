@@ -10,6 +10,7 @@ class LocalContact {
   final String? name;
   final String? firstName;
   final String? phoneNr;
+  final int listOrder;
 
   // ctor
   LocalContact({
@@ -17,6 +18,7 @@ class LocalContact {
     required this.name,
     required this.firstName,
     required this.phoneNr,
+    required this.listOrder,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +27,7 @@ class LocalContact {
       'name': name,
       'firstName': firstName,
       'phoneNr': phoneNr,
+      'listOrder': listOrder,
     };
   }
 
@@ -32,10 +35,11 @@ class LocalContact {
       : id = res["id"],
         name = res["name"],
         firstName = res["firstName"],
-        phoneNr = res["phoneNr"];
+        phoneNr = res["phoneNr"],
+        listOrder = res["listOrder"];
 
   @override
   String toString() {
-    return 'todo{id: $id, name: $name, firstName: $firstName, phoneNr: $phoneNr}';
+    return 'todo{id: $id, name: $name, firstName: $firstName, phoneNr: $phoneNr, listOrder: $listOrder}';
   }
 }

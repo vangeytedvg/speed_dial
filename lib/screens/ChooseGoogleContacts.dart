@@ -102,6 +102,7 @@ class _GoogleChooserState extends State<GoogleChooser> {
                                   .insertContact(LocalContact(
                                       name: contacts![index].name.last,
                                       firstName: contacts![index].name.first,
+                                      listOrder: -1,
                                       phoneNr:
                                           contacts![index].phones.first.number))
                                   .whenComplete(

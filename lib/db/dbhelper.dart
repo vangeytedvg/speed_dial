@@ -9,7 +9,6 @@
     LM    : 16/05/2022
  */
 
-import 'package:friendly_chat/screens/call_history.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,6 +27,7 @@ class DatabaseHandler {
         name TEXT,
         firstName TEXT,
         phoneNr TEXT,
+        listOrder INTEGER,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )""";
     String sqlhistory = """CREATE TABLE callhistory(
@@ -40,7 +40,7 @@ class DatabaseHandler {
         onCreate: (database, version) async {
       await database.execute(sql);
       await database.execute(sqlhistory);
-    }, version: 3);
+    }, version: 4);
   }
 
   Future<void> createHistory() async {

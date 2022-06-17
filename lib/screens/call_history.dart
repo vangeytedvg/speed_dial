@@ -88,11 +88,11 @@ class _CallHistoryState extends State<CallHistory> {
                       children: snapshot.data!
                           .map(
                             (history) => ListTile(
-                              title: Text(
+                              title: const Text(
                                   style: TextStyle(color: Colors.white),
                                   "Oproep gedaan op:"),
                               subtitle: Text(
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                   history.called.toString()),
                             ),
                           )
