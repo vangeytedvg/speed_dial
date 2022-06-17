@@ -9,8 +9,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:friendly_chat/models/history.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:friendly_chat/screens/sms_details.dart';
 
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
@@ -29,6 +32,7 @@ class _ListScreenState extends State<ListScreen> {
   DatabaseHandler? handler;
   Future<List<LocalContact>>? _contacts;
   int? nrOfLocalContacts;
+  int _smsClicksCounter = 0;
 
   /*
     State management
@@ -43,6 +47,13 @@ class _ListScreenState extends State<ListScreen> {
       setState(() {
         _contacts = getList();
       });
+    });
+  }
+
+  // SMS Counter increment
+  void _incrementSMSClickCounter() {
+    setState(() {
+      _smsClicksCounter++;
     });
   }
 
@@ -78,6 +89,62 @@ class _ListScreenState extends State<ListScreen> {
     }
   }
 
+  /* 
+    SMS Dialog
+  */
+  void _showSMSDialog(String phoneNr) {
+    List<String> recipient = [phoneNr];
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Quick SMS"),
+            content: const Text("Kies de snelle boodschap:"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => _sendSMS("Bel mij aub!", recipient),
+                  child: const Text("Bel mij aub!")),
+              TextButton(
+                  onPressed: () => _sendSMS("Kom langs aub!", recipient),
+                  child: Text("Kom langs aub!")),
+              TextButton(
+                  onPressed: () =>
+                      _sendSMS("Stuur mij een bericht!", recipient),
+                  child: Text("Stuur mij een bericht!")),
+            ],
+          );
+        });
+  }
+
+  Future<void> _sendSMS(String message, List<String> recipients) async {
+    try {
+      String _result = await sendSMS(
+        message: message,
+        recipients: recipients,
+        sendDirect: false,
+      );
+      Fluttertoast.showToast(
+          msg: "SMS is verzonden!",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      debugPrint(_result);
+    } catch (error) {
+      debugPrint(error.toString());
+      Fluttertoast.showToast(
+          msg: error.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+    // ignore: use_build_context_synchronously
+  }
+
   /*
     UI definition
     */
@@ -98,6 +165,7 @@ class _ListScreenState extends State<ListScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        // Handle the user pressing the (+) key
         onPressed: () async {
           Navigator.push(
             context,
@@ -147,6 +215,9 @@ class _ListScreenState extends State<ListScreen> {
                             return await showDialog(
                               context: context,
                               builder: (BuildContext context) {
+                                /* 
+                                  CONFIRM DELETE DIALOG
+                                 */
                                 return AlertDialog(
                                   title: Text(
                                       "list_alert_confirm_delete_title".tr()),
@@ -171,6 +242,9 @@ class _ListScreenState extends State<ListScreen> {
                               },
                             );
                           },
+                          /** 
+                            SWIPED TO DELETE
+                           */
                           onDismissed: (DismissDirection direction) async {
                             // Remove from database and listview
                             await handler?.deleteContact(items[index].id);
@@ -217,6 +291,35 @@ class _ListScreenState extends State<ListScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text('${items[index].phoneNr}'),
+                                /**
+                                 * After 3 taps show SMS Dialog
+                                 */
+                                onTap: () {
+                                  _incrementSMSClickCounter();
+                                  if (_smsClicksCounter > 2) {
+                                    // Implement SMS and reset counter
+
+                                    setState(() {
+                                      _smsClicksCounter = 0;
+                                    });
+                                    String? phoneNr = items[index].phoneNr;
+                                    if (phoneNr != null) {
+                                      // Call the selected number without delay
+                                      //_showSMSDialog(phoneNr);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SMSform(),
+                                              settings: RouteSettings(
+                                                arguments: items[index],
+                                              )));
+                                    }
+                                  }
+                                },
+                                /**
+                                 * Call the contact.
+                                 */
                                 onLongPress: () async {
                                   final int? callId = items[index].id;
                                   await DatabaseHandler()
