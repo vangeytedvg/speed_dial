@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_chat/models/history.dart';
 import 'package:friendly_chat/models/local_contact.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../db/dbhelper.dart';
 
@@ -42,13 +43,13 @@ class _CallHistoryState extends State<CallHistory> {
       backgroundColor: Colors.black45,
       appBar: AppBar(
         backgroundColor: Colors.green.shade900,
-        title: const Text('Oproep geschiedenis'),
+        title: Text("call_history_title".tr()),
         actions: [
           PopupMenuButton<int>(
             onSelected: (item) => onSelected(context, item, contact.id),
             itemBuilder: (context) => [
-              const PopupMenuItem<int>(
-                  value: 0, child: Text("Wis deze geschiedenis")),
+              PopupMenuItem<int>(
+                  value: 0, child: Text("call_history_erase_menu_item".tr())),
             ],
           )
         ],
@@ -74,13 +75,13 @@ class _CallHistoryState extends State<CallHistory> {
                 * "A RenderFlex overflowed by 309 pixels on the bottom."
                 * */
                 if (handler?.getCallHistoryCount == 0) {
-                  return (const Center(
+                  return (Center(
                       child: Text(
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontStyle: FontStyle.italic),
-                          "Geen oproep geschiedenis!")));
+                          "call_history_no_records".tr())));
                 } else {
                   return Expanded(
                     child: ListView(
@@ -88,11 +89,14 @@ class _CallHistoryState extends State<CallHistory> {
                       children: snapshot.data!
                           .map(
                             (history) => ListTile(
-                              title: const Text(
+                              // ignore: prefer_const_constructors
+                              title: Text(
+                                  // ignore: prefer_const_constructors
                                   style: TextStyle(color: Colors.white),
                                   "Oproep gedaan op:"),
                               subtitle: Text(
-                                  style: const TextStyle(color: Colors.white),
+                                  // ignore: prefer_const_constructors
+                                  style: TextStyle(color: Colors.white),
                                   history.called.toString()),
                             ),
                           )

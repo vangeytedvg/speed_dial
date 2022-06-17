@@ -10,8 +10,8 @@
  */
 
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import '../models/local_contact.dart';
 import '../models/history.dart';
 

@@ -47,7 +47,8 @@ Widget _aboutLayout() {
               fontFamily: "BrushKing-MVVPp"),
         )),
         subtitle: Center(
-            child: Text("about_title".tr(), style: TextStyle(fontSize: 20))),
+            child:
+                Text("about_title".tr(), style: const TextStyle(fontSize: 20))),
       ),
       const SizedBox(
         height: 45,
