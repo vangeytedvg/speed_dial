@@ -16,5 +16,11 @@
     "choose_google_contacts_no_phone": "Pas de numéro de téléphone",
     "choose_google_contacts_no_phone_dialog_title": "Pas de numéro de téléphone",
     "choose_google_contacts_no_phone_dialog_content": "Ce contact n'a pas de numéro de téléphone dans Google Contacts. Il est inutile d'ajouter ce contact !",
-    "choose_google_contacts_no_phone_dialog_ok": "Compris"
+    "choose_google_contacts_no_phone_dialog_ok": "Compris",
+    "sms_details_title": "Envoyer SMS",
+    "sms_details_sent": "SMS a été envoyé",
+    "sms_details_callme": "Appele moi!",
+    "sms_details_textme": "Envoi moi un message!",
+    "sms_details_comeover": "Viens me voir!",
+    "sms_details_mylocation": "Ceci est mon emplacement actuel:"
 }

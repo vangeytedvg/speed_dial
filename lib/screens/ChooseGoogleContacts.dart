@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:friendly_chat/models/local_contact.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import '../db/dbhelper.dart';
 
@@ -64,7 +65,13 @@ class _GoogleChooserState extends State<GoogleChooser> {
                       dense: false,
                       // Show an avatar of the contact's picture, or show first letter avatar
                       leading: (image == null)
-                          ? const CircleAvatar(child: Icon(Icons.person))
+                          ? CircleAvatar(
+                              radius: 25.0,
+                              backgroundColor: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt())
+                                  .withOpacity(1.0),
+                              child: Icon(Icons.person))
                           // If no image available...
                           : CircleAvatar(backgroundImage: MemoryImage(image)),
                       trailing: IconButton(

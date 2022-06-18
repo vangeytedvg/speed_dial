@@ -58,7 +58,7 @@ Widget _aboutLayout() {
           alignment: Alignment.center,
           child: Image.asset("assets/splash.png", fit: BoxFit.cover)),
       ListTile(
-        title: const Center(child: Text("Version 0.1.3")),
+        title: const Center(child: Text("Version 0.1.4")),
         subtitle: Center(child: Text("about_written".tr())),
       ),
     ],

@@ -16,5 +16,11 @@
     "choose_google_contacts_no_phone": "Geen telefoonnummer",
     "choose_google_contacts_no_phone_dialog_title": "Geen telefoonnummer",
     "choose_google_contacts_no_phone_dialog_content": "Dit contact heeft geen telefoonnummer in google contacts. Het is nutteloos om dit toe te voegen!",
-    "choose_google_contacts_no_phone_dialog_ok": "Begrepen"
+    "choose_google_contacts_no_phone_dialog_ok": "Begrepen",
+    "sms_details_title": "Snelle SMS verzenden",
+    "sms_details_sent": "SMS is verzonden",
+    "sms_details_callme": "Bel me!",
+    "sms_details_textme": "Stuur mij een bericht!",
+    "sms_details_comeover": "Kom langs!",
+    "sms_details_mylocation": "Dit is mijn huidige locatie:"
 }

@@ -1,14 +1,15 @@
-// ignore: slash_for_doc_comments
-/**
- * sms_details.dart
- * Created : 17/06/2022
- *    LM   : 17/06/2022
- */
+///
+/// sms_details.dart
+/// Sends predefined SMS's to a contact
+/// Author : DenkTech
+/// Created : 17/06/2022
+///   LM    : 18/06/2022
+///
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SMSform extends StatefulWidget {
   final String contactName;
@@ -18,25 +19,74 @@ class SMSform extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SMSform> createState() => _SMSformState();
+  // ignore: no_logic_in_create_state
+  State<SMSform> createState() => _SMSformState(contactName, contactPhoneNr);
 }
 
 class _SMSformState extends State<SMSform> {
-  Future<void> _sendSMS(String message, List<String> recipients) async {
+  final String contactName;
+  final String contactPhonenr;
+  _SMSformState(this.contactName, this.contactPhonenr);
+
+  /// Determine the current location of the phone
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  /*
+   * This method Sends the actual SMS
+   */
+  Future<void> _sendSMS(String message, phoneNr) async {
+    List<String> recipients = [];
+    recipients.add(phoneNr);
     try {
-      String _result = await sendSMS(
+      String result = await sendSMS(
         message: message,
         recipients: recipients,
         sendDirect: false,
       );
       Fluttertoast.showToast(
-          msg: "SMS is verzonden!",
+          msg: "sms_details_sent".tr(),
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
-      debugPrint(_result);
+      debugPrint(result);
     } catch (error) {
       debugPrint(error.toString());
       Fluttertoast.showToast(
@@ -47,14 +97,19 @@ class _SMSformState extends State<SMSform> {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-    // ignore: use_build_context_synchronously
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black45,
       appBar: AppBar(
-        title: const Text("Snelle SMS verzenden"),
+        title: Text(
+          "SMS -> $contactName",
+          overflow: TextOverflow.fade,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
           child: Padding(
@@ -65,20 +120,51 @@ class _SMSformState extends State<SMSform> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ElevatedButton(
-                child: Text("Bel me!"),
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(240, 80), primary: Colors.deepOrange),
+                child: Text(
+                  "sms_details_callme".tr(),
+                  style: const TextStyle(fontSize: 20),
+                ),
+                onPressed: () {
+                  _sendSMS("sms_details_callme".tr(), contactPhonenr);
+                },
               ),
+              const SizedBox(height: 10.0),
               ElevatedButton(
-                child: Text("Stuur mij een bericht!"),
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(240, 80), primary: Colors.deepOrange),
+                child: Text("sms_details_textme".tr(),
+                    style: const TextStyle(fontSize: 20)),
+                onPressed: () {
+                  _sendSMS("sms_details_textme".tr(), contactPhonenr);
+                },
               ),
+              const SizedBox(height: 10.0),
               ElevatedButton(
-                child: Text("Kom langs!"),
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(240, 80), primary: Colors.deepOrange),
+                child: Text("sms_details_comeover".tr(),
+                    style: const TextStyle(fontSize: 20)),
+                onPressed: () {
+                  _sendSMS("sms_details_comeover".tr(), contactPhonenr);
+                },
               ),
+              const SizedBox(height: 10.0),
               ElevatedButton(
-                child: Text("Dit is mijn locatie"),
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(240, 80), primary: Colors.deepOrange),
+                child: Text("sms_details_mylocation".tr(),
+                    style: const TextStyle(fontSize: 20)),
+                onPressed: () async {
+                  // Obtain the GPS location of the device and send it via SMS
+                  String smsText = "";
+                  Position position = await _determinePosition();
+                  String geolocurl =
+                      "http://maps.google.com/?q=${position.latitude},${position.longitude}";
+                  smsText = "${"sms_details_mylocation".tr()}  $geolocurl";
+                  _sendSMS(smsText, contactPhonenr);
+                },
               ),
             ],
           ),

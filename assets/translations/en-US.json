@@ -16,5 +16,11 @@
     "choose_google_contacts_no_phone": "No phone number",
     "choose_google_contacts_no_phone_dialog_title": "No phone number",
     "choose_google_contacts_no_phone_dialog_content": "This contact has no phone nr, it is useless to add it",
-    "choose_google_contacts_no_phone_dialog_ok": "Got it."
+    "choose_google_contacts_no_phone_dialog_ok": "Got it.",
+    "sms_details_title": "Send quick SMS",
+    "sms_details_sent": "SMS has been sent!",
+    "sms_details_callme": "Call me!",
+    "sms_details_textme": "Send me a text message!",
+    "sms_details_comeover": "Come over at my place!",
+    "sms_details_mylocation": "This is my current location:"
 }

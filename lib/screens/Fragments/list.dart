@@ -9,11 +9,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:friendly_chat/models/history.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_sms/flutter_sms.dart';
 import 'package:friendly_chat/screens/sms_details.dart';
+import 'dart:math' as math;
 
 import '../.././models/local_contact.dart';
 import '../../db/dbhelper.dart';
@@ -89,62 +88,6 @@ class _ListScreenState extends State<ListScreen> {
     }
   }
 
-  /* 
-    SMS Dialog
-  */
-  void _showSMSDialog(String phoneNr) {
-    List<String> recipient = [phoneNr];
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Quick SMS"),
-            content: const Text("Kies de snelle boodschap:"),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () => _sendSMS("Bel mij aub!", recipient),
-                  child: const Text("Bel mij aub!")),
-              TextButton(
-                  onPressed: () => _sendSMS("Kom langs aub!", recipient),
-                  child: Text("Kom langs aub!")),
-              TextButton(
-                  onPressed: () =>
-                      _sendSMS("Stuur mij een bericht!", recipient),
-                  child: Text("Stuur mij een bericht!")),
-            ],
-          );
-        });
-  }
-
-  Future<void> _sendSMS(String message, List<String> recipients) async {
-    try {
-      String _result = await sendSMS(
-        message: message,
-        recipients: recipients,
-        sendDirect: false,
-      );
-      Fluttertoast.showToast(
-          msg: "SMS is verzonden!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      debugPrint(_result);
-    } catch (error) {
-      debugPrint(error.toString());
-      Fluttertoast.showToast(
-          msg: error.toString(),
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-    // ignore: use_build_context_synchronously
-  }
-
   /*
     UI definition
     */
@@ -172,7 +115,7 @@ class _ListScreenState extends State<ListScreen> {
             MaterialPageRoute(builder: (context) => const GoogleChooser()),
           ).whenComplete(() => _onRefresh());
         },
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: const Color.fromARGB(255, 23, 184, 109),
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<LocalContact>>(
@@ -260,9 +203,12 @@ class _ListScreenState extends State<ListScreen> {
                               child: ListTile(
                                 leading: CircleAvatar(
                                   radius: 25,
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: _getColor(
+                                      "${items[index].firstName?.substring(0, 1)}"),
                                   child: Text(
+                                      overflow: TextOverflow.fade,
                                       style: const TextStyle(
+                                          color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 25),
                                       "${items[index].firstName?.substring(0, 1)}"),
@@ -303,17 +249,18 @@ class _ListScreenState extends State<ListScreen> {
                                       _smsClicksCounter = 0;
                                     });
                                     String? phoneNr = items[index].phoneNr;
+                                    String? contactName =
+                                        '${items[index].firstName} ${items[index].name}';
                                     if (phoneNr != null) {
-                                      // Call the selected number without delay
-                                      //_showSMSDialog(phoneNr);
+                                      /*
+                                        Navigate to the SMS screen 
+                                      */
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const SMSform(),
-                                              settings: RouteSettings(
-                                                arguments: items[index],
-                                              )));
+                                              builder: (context) => SMSform(
+                                                  contactName: contactName,
+                                                  contactPhoneNr: phoneNr)));
                                     }
                                   }
                                 },
@@ -344,5 +291,10 @@ class _ListScreenState extends State<ListScreen> {
         },
       ),
     );
+  }
+
+  Color _getColor(String s) {
+    int colorVal = s.codeUnitAt(0);
+    return Color.fromARGB(10 * colorVal, 100 * colorVal, 25 * colorVal, 1);
   }
 }
